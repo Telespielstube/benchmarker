@@ -12,7 +12,7 @@ from calculator import Calculator
 class Menu():
     def __init__(self):       
         self.service = Service()
-        self.epochs = 10
+        self.epochs = 100
         self.learning_rate = 0.001
         self.plotter = Plotter()
         self.storage = Storage()
