@@ -12,7 +12,7 @@ from calculator import Calculator
 class Menu():
     def __init__(self):       
         self.service = Service()
-        self.epochs = 100
+        self.epochs = 10
         self.learning_rate = 0.001
         self.plotter = Plotter()
         self.storage = Storage()
@@ -70,7 +70,7 @@ class Menu():
             train_loss_avg_list.append(train_loss_average)
             val_loss_avg_list.append(val_loss_average)
             accuracy_avg_list.append(accuracy_average)
-        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.epochs, 0, 1, 'Loss', 'Epochs / runs', 'Training', 'Loss', 'Benchmark_overview', 'training')
+        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.epochs, 0, 0.35, 'Loss', 'Epochs / runs', 'Training', 'Loss', 'Benchmark_overview', 'training')
         self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', None, 'Validation', 'Accuracy','Benchmark_overview', 'accuracy')
 
     # Executes the functions based on the menu selectection.

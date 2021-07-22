@@ -11,7 +11,7 @@ class Service():
     # Initializes the Service object. 
     def __init__(self):
         super().__init__()
-        self.batch_size = 128
+        self.batch_size = 32
         self.criterion = torch.nn.CrossEntropyLoss() #combines LogSoftmax and NLLLoss in one single class. Good for classification.
         self.optimizer_name = ''
         self.transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
