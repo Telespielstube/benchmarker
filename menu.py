@@ -80,7 +80,7 @@ class Menu():
             self.service.training(torch.optim.Adam(self.service.model.parameters(), lr=self.service.learning_rate), 'Adam', self.service.learning_rate, self.service.epochs)
             self.validate_and_save('Adam', self.service.learning_rate, self.service.batch_size)
         elif selection == '3':
-            self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
+            self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.service.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
             self.validate_and_save('LAMB', self.service.learning_rate, self.service.batch_size) 
         elif selection == '4':
             self.show_benchmark('SGD', 'Adam', 'LAMB')
