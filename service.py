@@ -7,11 +7,12 @@ from model import Model
 
 # Class to handles all 
 class Service():
-
     # Initializes the Service object. 
     def __init__(self):
         super().__init__()
         self.batch_size = 32
+        self.epochs = 20
+        self.learning_rate = 0.001
         self.criterion = torch.nn.CrossEntropyLoss() #combines LogSoftmax and NLLLoss in one single class. Good for classification.
         self.optimizer_name = ''
         self.transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -25,15 +26,14 @@ class Service():
         self.validation_accuracy = []  
 
     # Trains the model with the downloaded training dataset. 
-    # @return    the elapsed time to train the model with the given hyperparameters set in the __init__().
+    # @return    the elapsed time to train the model with the given hyperparameters batch size, epochs and learning rate.
     def training(self, optimizer, optimizer_name, learning_rate, epochs):
         print('Training in progress')
         self.model.train()
         self.optimizer_name = optimizer_name
         correct = 0
-        total = 0
         for epoch in range(epochs):
-            running_loss = 0
+            train_loss = 0
             for images, labels in self.training_data: 
                 images, labels = images.to(self.device), labels.to(self.device)
                 output = self.model(images)
@@ -41,29 +41,26 @@ class Service():
                 optimizer.zero_grad()
                 loss.backward() 
                 optimizer.step() 
-                running_loss += loss.item() # the value of this tensor as a standard Python number
-                _, predicted = torch.max(output, 1)
-                total += labels.size(0)
-                correct += (predicted == labels).sum().item()     
-            self.training_loss.append(running_loss / len(self.training_data.dataset))
-            print(f'Epoch {epoch} - Training loss: {running_loss / len(self.training_data.dataset):.10f}')       
+                train_loss += loss.item() # the value of this tensor as a standard Python number   
+            self.training_loss.append(train_loss / len(self.training_data.dataset))
+            print(f'Epoch {epoch} - Training loss: {train_loss / len(self.training_data.dataset):.10f}')       
 
     # Validates the trained model of the with the appropriate validation data set and displays loss and accuracy on the screen.
     def validate_cifar(self, epochs):
         print('Validating trained model.')
         self.model.eval()
         correct = 0
-        total = 0
         val_loss = 0
-        for run in range(epochs):
+        for _ in range(epochs):
             with torch.no_grad():
                 for images, labels in self.validation_data:
                     images, labels = images.to(self.device), labels.to(self.device)
                     outputs = self.model(images)
                     val_loss += self.criterion(outputs, labels).item() 
-                    _, predicted = torch.max(outputs, 1)
-                    total += labels.size(0)
-                    correct += (predicted == labels).sum().item()
+                    predicted = outputs.argmax(1, True)
+                   # _, predicted = torch.max(outputs, 1)
+                    correct += predicted.eq(labels.view_as(predicted)).sum().item()
+                    #correct += (predicted == labels).sum().item()
                 self.validation_loss.append(val_loss / len(self.validation_data.dataset))     
         self.validation_accuracy.append((100.0 * correct / len(self.validation_data.dataset) / epochs)) 
         print(f'{self.optimizer_name} test loss: {val_loss / len(self.validation_data.dataset):.10f}, and test accuracy: {correct / epochs}/{len(self.validation_data.dataset)} ({(100.0 * correct / len(self.validation_data.dataset)) / epochs:.0f}%)')

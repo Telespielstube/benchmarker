@@ -7,8 +7,8 @@ class Plotter():
         self.save_path = './plotter/'
           
     # Plots a graph with the give points list and shows it on screen.
-    # @train_list       list of points to plot.
-    # @val_list       list of points to plot.
+    # @train_list       list of train values to plot.
+    # @validation_list  list of validation values to plot.
     # @x_axis_min       minimum value on the x-axis.
     # @x_axis_max       maximum value on the x-axis. 
     # @y_axis_min       minimum value on the y-axis.
@@ -19,12 +19,14 @@ class Plotter():
     # @legend           descirbes the shown graph.
     # @optimizer_name   Name of the selected optimizer.
     # @graph_name       specifies the name of the graph.
-    def plot_loss(self, train_list, val_list, x_axis_min, x_axis_max, 
+    def plot_loss(self, train_list, validation_list, x_axis_min, x_axis_max, 
                     y_axis_min, y_axis_max, y_label, x_label, 
-                    title, legend, save_file, graph_name):
+                    title, legend, save_file, graph_name, epochs):
+        print(*train_list)
+        print(*validation_list)
         for entry in train_list:
             plt.plot(entry, '-o') 
-        for entry in val_list:
+        for entry in validation_list:
             plt.plot(entry, '-o')
         plt.axis([x_axis_min, x_axis_max, y_axis_min, y_axis_max])
         plt.legend(['SGD train loss', 'Adam train loss', 'LAMB train loss', 
@@ -36,7 +38,7 @@ class Plotter():
             os.mkdir(self.save_path)
         except FileExistsError:
             pass
-        plt.savefig(f'{self.save_path}{save_file}_{graph_name}.png')
+        plt.savefig(f'{self.save_path}{save_file}_{graph_name}_{epochs}.png')
         plt.show()
     
     # Plots a graph with the give points list and shows it on screen.
@@ -51,19 +53,20 @@ class Plotter():
     # @legend           descirbes the shown graph.
     # @optimizer_name   Name of the selected optimizer.
     # @graph_name       specifies the name of the graph.
-    def plot_accuracy(self, value_list, x_axis_min, x_axis_max, 
+    def plot_accuracy(self, acc_list, x_axis_min, x_axis_max, 
                     y_axis_min, y_axis_max, y_label, x_label, 
-                    title, legend, save_file, graph_name):
-        for entry in value_list:
+                    title, legend, save_file, graph_name, epochs):
+        for entry in acc_list:
             plt.plot(entry, '-o') 
         plt.axis([x_axis_min, x_axis_max, y_axis_min, y_axis_max])
         plt.legend(['SGD', 'Adam', 'LAMB'])
         plt.ylabel(y_label)
         plt.xlabel(x_label)
+        plt.xticks([])
         plt.title(title)
         try:
             os.mkdir(self.save_path)
         except FileExistsError:
             pass
-        plt.savefig(f'{self.save_path}{save_file}_{graph_name}.png')
+        plt.savefig(f'{self.save_path}{save_file}_{graph_name}_{epochs}.png')
         plt.show()

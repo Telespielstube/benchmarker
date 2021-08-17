@@ -9,12 +9,12 @@ class Storage():
     # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.   
     # @kind                specifies the save file string either to training or validation.
     # @data_to_save        what kind of data to be saved: training_loss or validation accuracy
-    def save_csv_file(self, optimizer_name, kind, data_to_save):
+    def save_csv_file(self, optimizer_name, kind, data_to_save, epochs):
         try:
             os.mkdir(self.save_path)
         except FileExistsError:
             pass
-        with open(f'{self.save_path}{optimizer_name}_{kind}.csv', 'a', newline='') as csv_validation:
+        with open(f'{self.save_path}{optimizer_name}_{kind}_{epochs}.csv', 'a', newline='') as csv_validation:
             writer = csv.writer(csv_validation, delimiter=',')
             writer.writerow(data_to_save)
             data_to_save.clear()
@@ -25,16 +25,17 @@ class Storage():
     # @return              a list for each row in the csv file, number of lists
     def load_loss_csv(self, optimizer_name, kind): 
         list_in_list = []    
-  
-        with open(f'{self.save_path}{optimizer_name}_{kind}.csv', newline='') as csv_loss:
-            loss = csv.reader(csv_loss, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)          
-            number_of_lists = 0
-            data_list = []
-            for row in loss:
-                data_list.append(row)
-                number_of_lists += 1
-        list_in_list.append(data_list) 
-      #  print(*list_in_list) 
+        try:
+            with open(f'{self.save_path}{optimizer_name}_{kind}.csv', newline='') as csv_loss:
+                loss = csv.reader(csv_loss, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)          
+                number_of_lists = 0
+                data_list = []
+                for row in loss:
+                    data_list.append(row)
+                    number_of_lists += 1
+            list_in_list.append(data_list) 
+        except FileExistsError:
+            print('File not found.')
         return list_in_list, number_of_lists
 
     # Loads the saved validation data csv file.

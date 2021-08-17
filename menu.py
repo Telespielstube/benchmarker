@@ -1,8 +1,7 @@
 import sys, os, pathlib, torch, time, math
 import torch_optimizer as optim
-import warnings
-
-from torch.serialization import SourceChangeWarning
+#import warnings
+#from torch.serialization import SourceChangeWarning
 from service import Service
 from plotter import Plotter
 from storage import Storage
@@ -12,8 +11,6 @@ from calculator import Calculator
 class Menu():
     def __init__(self):       
         self.service = Service()
-        self.epochs = 10
-        self.learning_rate = 0.001
         self.plotter = Plotter()
         self.storage = Storage()
         self.calculator = Calculator()
@@ -45,10 +42,10 @@ class Menu():
     # @learning_rate     User input vslue which defines the step size in the data record 
     # @epochs            User input which defines the cycles over the data  
     def validate_and_safe(self, optimizer_name, learning_rate, epochs):
-        self.service.validate_cifar(self.epochs)
-        self.storage.save_csv_file(self.service.optimizer_name, 'training', self.service.training_loss)
-        self.storage.save_csv_file(self.service.optimizer_name, 'validation', self.service.validation_loss)
-        self.storage.save_csv_file(self.service.optimizer_name, 'accuracy', self.service.validation_accuracy)
+        self.service.validate_cifar(self.service.epochs)
+        self.storage.save_csv_file(self.service.optimizer_name, 'training', self.service.training_loss, self.service.epochs)
+        self.storage.save_csv_file(self.service.optimizer_name, 'validation', self.service.validation_loss, self.service.epochs)
+        self.storage.save_csv_file(self.service.optimizer_name, 'accuracy', self.service.validation_accuracy, self.service.epochs)
         print('Data is saved.\n')
 
     # Calls functions to show the selected optimizer benchmark.
@@ -70,24 +67,21 @@ class Menu():
             train_loss_avg_list.append(train_loss_average)
             val_loss_avg_list.append(val_loss_average)
             accuracy_avg_list.append(accuracy_average)
-        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.epochs, 0, 0.35, 'Loss', 'Epochs / runs', 'Training', 'Loss', 'Benchmark_overview', 'training')
-        self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', None, 'Validation', 'Accuracy','Benchmark_overview', 'accuracy')
+        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.epochs, 0, 0.35, 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
+        self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', 'Run', 'Validation', 'Accuracy','Benchmark_overview', 'accuracy', self.service.epochs)
 
     # Executes the functions based on the menu selectection.
     # @selection      selected number    
     def selected_option(self, selection): 
         if selection == '1':
-            print('You selected the SGD optimizer. Parameters are set to 10 epochs and to 0.001 as learning rate.')
-            self.service.training(torch.optim.SGD(self.service.model.parameters(), lr=self.learning_rate), 'SGD', self.learning_rate, self.epochs)
+            self.service.training(torch.optim.SGD(self.service.model.parameters(), lr=self.service.learning_rate), 'SGD', self.service.learning_rate, self.service.epochs)
             self.validate_and_safe('SGD', self.learning_rate, self.epochs)
         elif selection == '2':
-            print('You selected the Adam optimizer. Parameters are set to 10 epochs and to 0.001 as learning rate.') 
-            self.service.training(torch.optim.Adam(self.service.model.parameters(), lr=self.learning_rate), 'Adam', self.learning_rate, self.epochs)
-            self.validate_and_safe('Adam', self.learning_rate, self.epochs)
+            self.service.training(torch.optim.Adam(self.service.model.parameters(), lr=self.service.learning_rate), 'Adam', self.service.learning_rate, self.service.epochs)
+            self.validate_and_safe('Adam', self.service.learning_rate, self.service.epochs)
         elif selection == '3':
-            print('You selected the LAMB optimizer. Parameters are set to 10 epochs and to 0.001 as learning rate.') 
-            self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.learning_rate), 'LAMB', self.learning_rate, self.epochs)
-            self.validate_and_safe('LAMB', self.learning_rate, self.epochs) 
+            self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
+            self.validate_and_safe('LAMB', self.service.learning_rate, self.service.epochs) 
         elif selection == '4':
             self.show_benchmark('SGD', 'Adam', 'LAMB')
         elif selection == '5':

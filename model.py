@@ -10,9 +10,10 @@ class Model(Module):
 
         self.conv_layer = Sequential(
                         Conv2d(in_channels=3, out_channels=24, kernel_size=3, stride=1, padding=1), BatchNorm2d(24), ReLU(),#3 input channels (red, green, blue), 6 output channels, 3x3 filter
-                        Conv2d(24, 32, 3, 1, 1), Dropout(p=0.3), BatchNorm2d(32), ReLU(), MaxPool2d(2),
-                        Conv2d(32, 64, 3, 1, 1), Dropout(p=0.3), BatchNorm2d(64), ReLU(), MaxPool2d(2))
-        self.linear_layer = Sequential(Linear(64 * 8 * 8, 128), ReLU(), 
+                        Conv2d(24, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2),
+                        Conv2d(24, 32, 3, 1, 1), BatchNorm2d(32), ReLU(), MaxPool2d(2),
+                        Conv2d(32, 64, 3, 1, 1), BatchNorm2d(64), ReLU(), MaxPool2d(2))
+        self.linear_layer = Sequential(Linear(64 * 4 * 4, 128), ReLU(), 
                         Linear(128, 64), ReLU(),
                         Linear(64, 10))
   
@@ -21,8 +22,8 @@ class Model(Module):
     # @return    flattened output tensor
     def forward(self, input):
         output = self.conv_layer(input) # 3 color channels, 32x32 pixel image
-        #print(output.shape)
-        output = output.view(-1, 64 * 8 * 8) 
+       # print(output.shape)
+        output = output.view(-1, 64 * 4 * 4) 
         output = self.linear_layer(output)  
         return output
 
