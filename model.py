@@ -7,8 +7,7 @@ class Model(Module):
     # Initializes the convolutional neural network.    
     def __init__(self):
         super().__init__()
-        self.conv_layer = Sequential(
-                        Conv2d(3, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2),#3 input channels (red, green, blue), 6 output channels, 3x3 filter
+        self.conv_layer = Sequential(Conv2d(3, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2),#3 input channels (red, green, blue), 24 output channels, 3x3 filter
                         Conv2d(24, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2),
                         Conv2d(24, 32, 3, 1, 1), BatchNorm2d(32), ReLU(), MaxPool2d(2),
                         Conv2d(32, 64, 3, 1, 1), BatchNorm2d(64), ReLU(), MaxPool2d(2))
