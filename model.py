@@ -7,13 +7,12 @@ class Model(Module):
     # Initializes the convolutional neural network.    
     def __init__(self):
         super().__init__()
-
         self.conv_layer = Sequential(
-                        Conv2d(in_channels=3, out_channels=24, kernel_size=3, stride=1, padding=1), BatchNorm2d(24), ReLU(),#3 input channels (red, green, blue), 6 output channels, 3x3 filter
+                        Conv2d(3, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2),#3 input channels (red, green, blue), 6 output channels, 3x3 filter
                         Conv2d(24, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2),
                         Conv2d(24, 32, 3, 1, 1), BatchNorm2d(32), ReLU(), MaxPool2d(2),
                         Conv2d(32, 64, 3, 1, 1), BatchNorm2d(64), ReLU(), MaxPool2d(2))
-        self.linear_layer = Sequential(Linear(64 * 4 * 4, 128), ReLU(), 
+        self.linear_layer = Sequential(Linear(64 * 2 * 2, 128), ReLU(), 
                         Linear(128, 64), ReLU(),
                         Linear(64, 10))
   
@@ -23,7 +22,7 @@ class Model(Module):
     def forward(self, input):
         output = self.conv_layer(input) # 3 color channels, 32x32 pixel image
        # print(output.shape)
-        output = output.view(-1, 64 * 4 * 4) 
+        output = output.view(-1, 64 * 2 * 2) 
         output = self.linear_layer(output)  
         return output
 

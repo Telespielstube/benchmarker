@@ -41,7 +41,7 @@ class Service():
                 optimizer.zero_grad()
                 loss.backward() 
                 optimizer.step() 
-                train_loss += loss.item() # the value of this tensor as a standard Python number   
+                train_loss += loss.item() #Returns the value of this tensor as a standard Python number
             self.training_loss.append(train_loss / len(self.training_data.dataset))
             print(f'Epoch {epoch} - Training loss: {train_loss / len(self.training_data.dataset):.10f}')       
 
@@ -50,17 +50,15 @@ class Service():
         print('Validating trained model.')
         self.model.eval()
         correct = 0
-        val_loss = 0
+        valid_loss = 0
         for _ in range(epochs):
             with torch.no_grad():
                 for images, labels in self.validation_data:
                     images, labels = images.to(self.device), labels.to(self.device)
                     outputs = self.model(images)
-                    val_loss += self.criterion(outputs, labels).item() 
+                    valid_loss += self.criterion(outputs, labels).item() 
                     predicted = outputs.argmax(1, True)
-                   # _, predicted = torch.max(outputs, 1)
                     correct += predicted.eq(labels.view_as(predicted)).sum().item()
-                    #correct += (predicted == labels).sum().item()
-                self.validation_loss.append(val_loss / len(self.validation_data.dataset))     
+                self.validation_loss.append(valid_loss / len(self.validation_data.dataset))     
         self.validation_accuracy.append((100.0 * correct / len(self.validation_data.dataset) / epochs)) 
-        print(f'{self.optimizer_name} test loss: {val_loss / len(self.validation_data.dataset):.10f}, and test accuracy: {correct / epochs}/{len(self.validation_data.dataset)} ({(100.0 * correct / len(self.validation_data.dataset)) / epochs:.0f}%)')
+        print(f'{self.optimizer_name} test loss: {valid_loss / len(self.validation_data.dataset):.10f}, and test accuracy: {correct / epochs}/{len(self.validation_data.dataset)} ({(100.0 * correct / len(self.validation_data.dataset)) / epochs:.0f}%)')

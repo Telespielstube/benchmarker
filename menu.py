@@ -41,11 +41,11 @@ class Menu():
     # @optimizer_name    Name of the choosen optimizer.
     # @learning_rate     User input vslue which defines the step size in the data record 
     # @epochs            User input which defines the cycles over the data  
-    def validate_and_safe(self, optimizer_name, learning_rate, epochs):
+    def validate_and_save(self, optimizer_name, learning_rate, batch_size):
         self.service.validate_cifar(self.service.epochs)
-        self.storage.save_csv_file(self.service.optimizer_name, 'training', self.service.training_loss, self.service.epochs)
-        self.storage.save_csv_file(self.service.optimizer_name, 'validation', self.service.validation_loss, self.service.epochs)
-        self.storage.save_csv_file(self.service.optimizer_name, 'accuracy', self.service.validation_accuracy, self.service.epochs)
+        self.storage.save_csv_file(self.service.optimizer_name, 'training', self.service.training_loss, self.service.batch_size)
+        self.storage.save_csv_file(self.service.optimizer_name, 'validation', self.service.validation_loss, self.service.batch_size)
+        self.storage.save_csv_file(self.service.optimizer_name, 'accuracy', self.service.validation_accuracy, self.service.batch_size)
         print('Data is saved.\n')
 
     # Calls functions to show the selected optimizer benchmark.
@@ -75,13 +75,13 @@ class Menu():
     def selected_option(self, selection): 
         if selection == '1':
             self.service.training(torch.optim.SGD(self.service.model.parameters(), lr=self.service.learning_rate), 'SGD', self.service.learning_rate, self.service.epochs)
-            self.validate_and_safe('SGD', self.learning_rate, self.epochs)
+            self.validate_and_save('SGD', self.service.learning_rate, self.service.batch_size)
         elif selection == '2':
             self.service.training(torch.optim.Adam(self.service.model.parameters(), lr=self.service.learning_rate), 'Adam', self.service.learning_rate, self.service.epochs)
-            self.validate_and_safe('Adam', self.service.learning_rate, self.service.epochs)
+            self.validate_and_save('Adam', self.service.learning_rate, self.service.batch_size)
         elif selection == '3':
             self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
-            self.validate_and_safe('LAMB', self.service.learning_rate, self.service.epochs) 
+            self.validate_and_save('LAMB', self.service.learning_rate, self.service.batch_size) 
         elif selection == '4':
             self.show_benchmark('SGD', 'Adam', 'LAMB')
         elif selection == '5':

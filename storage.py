@@ -9,12 +9,12 @@ class Storage():
     # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.   
     # @kind                specifies the save file string either to training or validation.
     # @data_to_save        what kind of data to be saved: training_loss or validation accuracy
-    def save_csv_file(self, optimizer_name, kind, data_to_save, epochs):
+    def save_csv_file(self, optimizer_name, kind, data_to_save, batch_size):
         try:
             os.mkdir(self.save_path)
         except FileExistsError:
             pass
-        with open(f'{self.save_path}{optimizer_name}_{kind}_{epochs}.csv', 'a', newline='') as csv_validation:
+        with open(f'{self.save_path}{optimizer_name}_{kind}_{batch_size}.csv', 'a', newline='') as csv_validation:
             writer = csv.writer(csv_validation, delimiter=',')
             writer.writerow(data_to_save)
             data_to_save.clear()
