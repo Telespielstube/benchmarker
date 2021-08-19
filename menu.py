@@ -23,8 +23,8 @@ class Menu():
             print('Menu')
             print('----')
             print('Choose an optimizer to train the convolutional network or if a trained model already exists') 
-            print('check the performances of the different optimizers under point 4 (batch size = 32, epochs = 20')
-            print('and 5 (batch size = 128, epcohs = 80).\n')
+            print('check the performances of the different optimizers under point 4 (batch size = 64')
+            print('and 5 (batch size = 512).\n')
             print('1. SGD')
             print('2. Adam')
             print('3. LAMB')
@@ -53,7 +53,7 @@ class Menu():
     # Calls functions to show the selected optimizer benchmark.
     # @optimizer_name    sequence of all optimizers.
     # @batch_size        
-    def show_benchmark(self, *optimizer_name, batch_size):
+    def show_benchmark(self, batch_size, *optimizer_nam):
         train_loss_avg_list = []
         val_loss_avg_list = []
         accuracy_avg_list = [] 
@@ -86,9 +86,9 @@ class Menu():
             self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.service.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
             self.validate_and_save('LAMB', self.service.learning_rate, self.service.batch_size) 
         elif selection == '4':
-            self.show_benchmark('SGD', 'Adam', 'LAMB', self.service.batch_size)
+            self.show_benchmark(self.service.batch_size, 'SGD', 'Adam', 'LAMB')
         elif selection == '5':
-            self.show_benchmark('SGD', 'Adam', 'LAMB', self.service.batch_size)
+            self.show_benchmark(self.service.batch_size, 'SGD', 'Adam', 'LAMB')
         elif selection == '6':
             print('Bye, bye')
             sys.exit()
