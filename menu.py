@@ -23,13 +23,15 @@ class Menu():
             print('Menu')
             print('----')
             print('Choose an optimizer to train the convolutional network or if a trained model already exists') 
-            print('check the performances of the different optimizers under point 4.\n')
+            print('check the performances of the different optimizers under point 4 (batch size = 32, epochs = 20')
+            print('and 5 (batch size = 128, epcohs = 80).\n')
             print('1. SGD')
             print('2. Adam')
             print('3. LAMB')
-            print('4. Benchmark overview')
-            print('---------------------\n')
-            print('5. Exit\n')
+            print('4. 1. Test series benchmarks')
+            print('5. 2. Test series benchmarks')
+            print('----------------------------\n')
+            print('6. Exit\n')
             selection = input('Input: ')
             if not selection.isnumeric() or int(selection) > max or int(selection) < min :
                 print('Input not in range or not a number.')
@@ -50,14 +52,15 @@ class Menu():
 
     # Calls functions to show the selected optimizer benchmark.
     # @optimizer_name    sequence of all optimizers.
-    def show_benchmark(self, *optimizer_name):
+    # @batch_size        
+    def show_benchmark(self, *optimizer_name, batch_size):
         train_loss_avg_list = []
         val_loss_avg_list = []
         accuracy_avg_list = [] 
         for entry in range(len(optimizer_name)):
             # Load data
-            train_loss_list, number_of_lists = self.storage.load_loss_csv(optimizer_name[entry], 'training') 
-            val_loss_list, number_of_lists = self.storage.load_loss_csv(optimizer_name[entry], 'validation')
+            train_loss_list, number_of_lists = self.storage.load_loss_csv(optimizer_name[entry], 'training', batch_size) 
+            val_loss_list, number_of_lists = self.storage.load_loss_csv(optimizer_name[entry], 'validation', batch_size)
             accuracy_list = self.storage.load_accuracy_csv(optimizer_name[entry], 'accuracy') 
             #Calculate averages
             train_loss_average = self.calculator.calc_loss_average(train_loss_list, number_of_lists)
@@ -67,7 +70,7 @@ class Menu():
             train_loss_avg_list.append(train_loss_average)
             val_loss_avg_list.append(val_loss_average)
             accuracy_avg_list.append(accuracy_average)
-        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.epochs, 0, 0.35, 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
+        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.service.epochs, 0, 0.35, 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
         self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', 'Run', 'Validation', 'Accuracy','Benchmark_overview', 'accuracy', self.service.epochs)
 
     # Executes the functions based on the menu selectection.
@@ -83,7 +86,9 @@ class Menu():
             self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.service.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
             self.validate_and_save('LAMB', self.service.learning_rate, self.service.batch_size) 
         elif selection == '4':
-            self.show_benchmark('SGD', 'Adam', 'LAMB')
+            self.show_benchmark('SGD', 'Adam', 'LAMB', self.service.batch_size)
         elif selection == '5':
+            self.show_benchmark('SGD', 'Adam', 'LAMB', self.service.batch_size)
+        elif selection == '6':
             print('Bye, bye')
             sys.exit()

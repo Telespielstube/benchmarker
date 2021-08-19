@@ -23,10 +23,10 @@ class Storage():
     # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.
     # @kind                specifies the save file string either to training or validation.                
     # @return              a list for each row in the csv file, number of lists
-    def load_loss_csv(self, optimizer_name, kind): 
+    def load_loss_csv(self, optimizer_name, kind, batch_size): 
         list_in_list = []    
         try:
-            with open(f'{self.save_path}{optimizer_name}_{kind}.csv', newline='') as csv_loss:
+            with open(f'{self.save_path}{optimizer_name}_{kind}_{batch_size}.csv', newline='') as csv_loss:
                 loss = csv.reader(csv_loss, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)          
                 number_of_lists = 0
                 data_list = []

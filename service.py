@@ -11,7 +11,7 @@ class Service():
     def __init__(self):
         super().__init__()
         self.batch_size = 128
-        self.epochs = 60
+        self.epochs = 80
         self.learning_rate = 0.001
         self.criterion = torch.nn.CrossEntropyLoss() #combines LogSoftmax and NLLLoss in one single class. Good for classification.
         self.optimizer_name = ''
