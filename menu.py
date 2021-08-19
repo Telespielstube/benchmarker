@@ -53,7 +53,7 @@ class Menu():
     # Calls functions to show the selected optimizer benchmark.
     # @optimizer_name    sequence of all optimizers.
     # @batch_size        
-    def show_benchmark(self, batch_size, *optimizer_nam):
+    def show_benchmark(self, batch_size, *optimizer_name):
         train_loss_avg_list = []
         val_loss_avg_list = []
         accuracy_avg_list = [] 
