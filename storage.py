@@ -42,10 +42,10 @@ class Storage():
     # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.
     # @kind                specifies the save file string either to training or validation.
     # @return              a list of all measured accuracys.
-    def load_accuracy_csv(self, optimizer_name, kind):
+    def load_accuracy_csv(self, optimizer_name, kind, batch_size):
         validation_list = []
         try:
-            with open(f'{self.save_path}{optimizer_name}_{kind}.csv', newline='') as csv_validation:
+            with open(f'{self.save_path}{optimizer_name}_{kind}_{batch_size}.csv', newline='') as csv_validation:
                 validation = csv.reader(csv_validation, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
                 for row in validation:
                     validation_list.append(row)

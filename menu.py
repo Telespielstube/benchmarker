@@ -23,7 +23,7 @@ class Menu():
             print('Menu')
             print('----')
             print('Choose an optimizer to train the convolutional network or if a trained model already exists') 
-            print('check the performances of the different optimizers under point 4 (batch size = 64')
+            print('check the performances of the different optimizers under point 4 (batch size = 64)')
             print('and 5 (batch size = 512).\n')
             print('1. SGD')
             print('2. Adam')
@@ -61,7 +61,7 @@ class Menu():
             # Load data
             train_loss_list, number_of_lists = self.storage.load_loss_csv(optimizer_name[entry], 'training', batch_size) 
             val_loss_list, number_of_lists = self.storage.load_loss_csv(optimizer_name[entry], 'validation', batch_size)
-            accuracy_list = self.storage.load_accuracy_csv(optimizer_name[entry], 'accuracy') 
+            accuracy_list = self.storage.load_accuracy_csv(optimizer_name[entry], 'accuracy', batch_size) 
             #Calculate averages
             train_loss_average = self.calculator.calc_loss_average(train_loss_list, number_of_lists)
             val_loss_average = self.calculator.calc_loss_average(val_loss_list, number_of_lists)
@@ -70,7 +70,7 @@ class Menu():
             train_loss_avg_list.append(train_loss_average)
             val_loss_avg_list.append(val_loss_average)
             accuracy_avg_list.append(accuracy_average)
-        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.service.epochs, 0, 0.35, 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
+        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.service.epochs + 10, 0, 0.7, 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
         self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', 'Run', 'Validation', 'Accuracy','Benchmark_overview', 'accuracy', self.service.epochs)
 
     # Executes the functions based on the menu selectection.
@@ -86,9 +86,9 @@ class Menu():
             self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.service.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
             self.validate_and_save('LAMB', self.service.learning_rate, self.service.batch_size) 
         elif selection == '4':
-            self.show_benchmark(self.service.batch_size, 'SGD', 'Adam', 'LAMB')
+            self.show_benchmark(64, 'SGD', 'Adam', 'LAMB')
         elif selection == '5':
-            self.show_benchmark(self.service.batch_size, 'SGD', 'Adam', 'LAMB')
+            self.show_benchmark(512, 'SGD', 'Adam', 'LAMB')
         elif selection == '6':
             print('Bye, bye')
             sys.exit()
