@@ -10,7 +10,7 @@ class Model(Module):
         self.conv_layer = Sequential(Conv2d(3, 24, 3, 1, 1), BatchNorm2d(24), ReLU(),#3 input channels (red, green, blue), 24 output channels, 3x3 filter
                         Conv2d(24, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2), Dropout(0.2), 
                         Conv2d(24, 32, 3, 1, 1), BatchNorm2d(32), ReLU(), 
-                        Conv2d(24, 64, 3, 1, 1), BatchNorm2d(64), ReLU(), MaxPool2d(2), Dropout(0.2)) 
+                        Conv2d(32, 64, 3, 1, 1), BatchNorm2d(64), ReLU(), MaxPool2d(2), Dropout(0.2)) 
         self.linear_layer = Sequential(Linear(64 * 8 * 8, 128), ReLU(), 
                         Linear(128, 64), ReLU(),
                         Linear(64, 10))
