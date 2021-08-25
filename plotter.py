@@ -27,7 +27,7 @@ class Plotter():
         for entry in train_list:
             plt.plot(entry) 
         for entry in validation_list:
-            plt.plot(entry)
+            plt.plot(entry, 'bo')
         plt.axis([x_axis_min, x_axis_max, y_axis_min, y_axis_max])
         plt.legend(['SGD train loss', 'Adam train loss', 'LAMB train loss', 
                     'SGD Val loss', 'Adam Val loss', 'LAMB Val loss'])

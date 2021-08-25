@@ -57,6 +57,7 @@ class Menu():
         train_loss_avg_list = []
         val_loss_avg_list = []
         accuracy_avg_list = [] 
+        y_axis_range = [] 
         for entry in range(len(optimizer_name)):
             # Load data
             train_loss_list, number_of_lists = self.storage.load_loss_csv(optimizer_name[entry], 'training', batch_size) 
@@ -70,7 +71,8 @@ class Menu():
             train_loss_avg_list.append(train_loss_average)
             val_loss_avg_list.append(val_loss_average)
             accuracy_avg_list.append(accuracy_average)
-        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.service.epochs + 10, 0, 0.7, 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
+            y_axis_range.append(val_loss_average)
+        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.service.epochs + 10, 0, y_axis_range[-1], 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
         self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', 'Run', 'Validation', 'Accuracy','Benchmark_overview', 'accuracy', self.service.epochs)
 
     # Executes the functions based on the menu selectection.
