@@ -19,15 +19,14 @@ class Plotter():
     # @legend           descirbes the shown graph.
     # @optimizer_name   Name of the selected optimizer.
     # @graph_name       specifies the name of the graph.
-    def plot_loss(self, train_list, validation_list, x_axis_min, x_axis_max, 
-                    y_axis_min, y_axis_max, y_label, x_label, 
-                    title, legend, save_file, graph_name, epochs):
-        print(*train_list)
-        print(*validation_list)
+    def plot_loss(self, train_list, validation_list, x_axis_min, 
+                x_axis_max, y_axis_min, y_axis_max, y_label, x_label, 
+                title, legend, save_file, graph_name, epochs):
+
         for entry in train_list:
             plt.plot(entry) 
         for entry in validation_list:
-            plt.plot(entry, 'bo')
+            plt.plot(entry)
         plt.axis([x_axis_min, x_axis_max, y_axis_min, y_axis_max])
         plt.legend(['SGD train loss', 'Adam train loss', 'LAMB train loss', 
                     'SGD Val loss', 'Adam Val loss', 'LAMB Val loss'])
