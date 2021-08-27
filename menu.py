@@ -43,7 +43,7 @@ class Menu():
     # @optimizer_name    Name of the choosen optimizer.
     # @learning_rate     User input vslue which defines the step size in the data record 
     # @epochs            User input which defines the cycles over the data  
-    def validate_and_save(self, optimizer_name, learning_rate, batch_size):
+    def validate_and_save(self, optimizer_name, learning_rate):
         self.service.validate_cifar(self.service.epochs)
         self.storage.save_csv_file(self.service.optimizer_name, 'training', self.service.training_loss, self.service.batch_size)
         self.storage.save_csv_file(self.service.optimizer_name, 'validation', self.service.validation_loss, self.service.batch_size)
@@ -73,21 +73,21 @@ class Menu():
             accuracy_avg_list.append(accuracy_average)
             y_axis_range.append(val_loss_average[-1])
             y_axis_range.sort()
-        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.service.epochs + 2, 0, y_axis_range[-1] + 0.02, 'Loss', 'Epochs', 'Training', 'Loss', 'Benchmark_overview', 'training', self.service.epochs)
-        self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', 'Run', 'Validation', 'Accuracy','Benchmark_overview', 'accuracy', self.service.epochs)
+        self.plotter.plot_loss(train_loss_avg_list, val_loss_avg_list, 0, self.service.epochs, 0, y_axis_range[-1] + 0.02, 'Loss', 'Epochs', 'Losses', 'Benchmark_overview', 'training', batch_size)
+        self.plotter.plot_accuracy(accuracy_avg_list, None, None, 0, 100, 'Percent', 'Run', 'Accuracy', 'Benchmark_overview', 'accuracy', batch_size)
 
     # Executes the functions based on the menu selectection.
     # @selection      selected number    
     def selected_option(self, selection): 
         if selection == '1':
-            self.service.training(torch.optim.SGD(self.service.model.parameters(), lr=self.service.learning_rate), 'SGD', self.service.learning_rate, self.service.epochs)
-            self.validate_and_save('SGD', self.service.learning_rate, self.service.batch_size)
+            self.service.training(torch.optim.SGD(self.service.model.parameters(), lr=self.service.learning_rate, momentum=0.9), 'SGD', self.service.learning_rate, self.service.epochs)
+            self.validate_and_save('SGD', self.service.learning_rate)
         elif selection == '2':
             self.service.training(torch.optim.Adam(self.service.model.parameters(), lr=self.service.learning_rate), 'Adam', self.service.learning_rate, self.service.epochs)
-            self.validate_and_save('Adam', self.service.learning_rate, self.service.batch_size)
+            self.validate_and_save('Adam', self.service.learning_rate)
         elif selection == '3':
             self.service.training(optim.Lamb(self.service.model.parameters(), lr=self.service.learning_rate), 'LAMB', self.service.learning_rate, self.service.epochs)
-            self.validate_and_save('LAMB', self.service.learning_rate, self.service.batch_size) 
+            self.validate_and_save('LAMB', self.service.learning_rate) 
         elif selection == '4':
             self.show_benchmark(64, 'SGD', 'Adam', 'LAMB')
         elif selection == '5':

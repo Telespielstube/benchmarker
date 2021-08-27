@@ -1,5 +1,6 @@
-import os
+import os, math
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 # Shows the graph of the training and validations runs on the screen.
 class Plotter():  
@@ -21,13 +22,13 @@ class Plotter():
     # @graph_name       specifies the name of the graph.
     def plot_loss(self, train_list, validation_list, x_axis_min, 
                 x_axis_max, y_axis_min, y_axis_max, y_label, x_label, 
-                title, legend, save_file, graph_name, epochs):
+                title, save_file, graph_name, batch_size):
 
         for entry in train_list:
             plt.plot(entry) 
         for entry in validation_list:
             plt.plot(entry)
-        plt.axis([x_axis_min, x_axis_max, y_axis_min, y_axis_max])
+        plt.axis([int(x_axis_min), int(x_axis_max), y_axis_min, y_axis_max])
         plt.legend(['SGD train loss', 'Adam train loss', 'LAMB train loss', 
                     'SGD Val loss', 'Adam Val loss', 'LAMB Val loss'])
         plt.ylabel(y_label)
@@ -37,7 +38,7 @@ class Plotter():
             os.mkdir(self.save_path)
         except FileExistsError:
             pass
-        plt.savefig(f'{self.save_path}{save_file}_{graph_name}_{epochs}.png')
+        plt.savefig(f'{self.save_path}{save_file}_{graph_name}_{batch_size}.png')
         plt.show()
     
     # Plots a graph with the give points list and shows it on screen.
@@ -54,7 +55,7 @@ class Plotter():
     # @graph_name       specifies the name of the graph.
     def plot_accuracy(self, acc_list, x_axis_min, x_axis_max, 
                     y_axis_min, y_axis_max, y_label, x_label, 
-                    title, legend, save_file, graph_name, epochs):
+                    title, save_file, graph_name, batch_size):
         for entry in acc_list:
             plt.plot(entry, '-o') 
         plt.axis([x_axis_min, x_axis_max, y_axis_min, y_axis_max])
@@ -67,5 +68,5 @@ class Plotter():
             os.mkdir(self.save_path)
         except FileExistsError:
             pass
-        plt.savefig(f'{self.save_path}{save_file}_{graph_name}_{epochs}.png')
+        plt.savefig(f'{self.save_path}{save_file}_{graph_name}_{batch_size}.png')
         plt.show()
