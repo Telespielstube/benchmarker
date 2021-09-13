@@ -24,7 +24,7 @@ class Storage():
     # @kind                specifies the save file string either to training or validation.                
     # @return              a list for each row in the csv file, number of lists
     def load_loss_csv(self, optimizer_name, kind, batch_size): 
-        list_in_list = []    
+        loss_list = []    
         try:
             with open(f'{self.save_path}{optimizer_name}_{kind}_{batch_size}.csv', newline='') as csv_loss:
                 loss = csv.reader(csv_loss, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)          
@@ -33,10 +33,10 @@ class Storage():
                 for row in loss:
                     data_list.append(row)
                     number_of_lists += 1
-            list_in_list.append(data_list) 
+            loss_list.append(data_list) 
         except FileExistsError:
             print('File not found.')
-        return list_in_list, number_of_lists
+        return loss_list, number_of_lists
 
     # Loads the saved validation data csv file.
     # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.

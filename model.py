@@ -11,7 +11,8 @@ class Model(Module):
                         Conv2d(24, 24, 3, 1, 1), BatchNorm2d(24), ReLU(), MaxPool2d(2), Dropout(0.2), 
                         Conv2d(24, 32, 3, 1, 1), BatchNorm2d(32), ReLU(),
                         Conv2d(32, 64, 3, 1, 1), BatchNorm2d(64), ReLU(), MaxPool2d(2), Dropout(0.2))
-        self.linear_layer = Sequential(Linear(64 * 8 * 8, 128), ReLU(), 
+        self.linear_layer = Sequential(
+                        Linear(64 * 8 * 8, 128), ReLU(), 
                         Linear(128, 64), ReLU(),
                         Linear(64, 10))
   
