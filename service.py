@@ -5,9 +5,10 @@ from torchvision import datasets, transforms
 from datetime import datetime
 from model import Model
 
-# Class to handles all 
+""" Class to handles all services like training and validation run. """
 class Service():
-    # Initializes the Service object. 
+    
+    """Initializes the Service object. """
     def __init__(self):
         super().__init__()
         self.batch_size = 64
@@ -25,8 +26,9 @@ class Service():
         self.validation_loss = []
         self.validation_accuracy = []  
 
-    # Trains the model with the downloaded training dataset. 
-    # @return    the elapsed time to train the model with the given hyperparameters batch size, epochs and learning rate.
+    """Trains the model with the downloaded training dataset. 
+    
+    @return    the elapsed time to train the model with the given hyperparameters batch size, epochs and learning rate. """
     def training(self, optimizer, optimizer_name, learning_rate, epochs):
         print('Training in progress')
         self.model.train()
@@ -45,7 +47,7 @@ class Service():
             self.training_loss.append(train_loss / len(self.training_data.dataset))
             print(f'Epoch {epoch} - Training loss: {train_loss / len(self.training_data.dataset):.10f}')       
 
-    # Validates the trained model of the with the appropriate validation data set and displays loss and accuracy on the screen.
+    """ Validates the trained model of the with the appropriate validation data set and displays loss and accuracy on the screen. """
     def validate_cifar(self, epochs):
         print('Validating trained model.')
         self.model.eval()

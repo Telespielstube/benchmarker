@@ -1,14 +1,15 @@
 import csv, pathlib, os
 
+""" Handles the storage of the benchmark results."""
 class Storage():
 
     def __init__(self):
         self.save_path = './csv/'
 
-    # Saves the values from the trainig runs and the calculated validation accuracy to a csv file.
-    # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.   
-    # @kind                specifies the save file string either to training or validation.
-    # @data_to_save        what kind of data to be saved: training_loss or validation accuracy
+    """ Saves the values from the trainig runs and the calculated validation accuracy to a csv file.
+    @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.   
+    @kind                specifies the save file string either to training or validation.
+    @data_to_save        what kind of data to be saved: training_loss or validation accuracy. """
     def save_csv_file(self, optimizer_name, kind, data_to_save, batch_size):
         try:
             os.mkdir(self.save_path)
@@ -19,10 +20,10 @@ class Storage():
             writer.writerow(data_to_save)
             data_to_save.clear()
 
-    # Loads the saved training data csv file.
-    # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.
-    # @kind                specifies the save file string either to training or validation.                
-    # @return              a list for each row in the csv file, number of lists
+    """Loads the saved training data csv file.
+    @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.
+    @kind                specifies the save file string either to training or validation.                
+    @return              a list for each row in the csv file, number of lists. """
     def load_loss_csv(self, optimizer_name, kind, batch_size): 
         loss_list = []    
         try:
@@ -38,10 +39,10 @@ class Storage():
             print('File not found.')
         return loss_list, number_of_lists
 
-    # Loads the saved validation data csv file.
-    # @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.
-    # @kind                specifies the save file string either to training or validation.
-    # @return              a list of all measured accuracys.
+    """Loads the saved validation data csv file.
+    @optimizer_name      Name of the selected optimizer. Necessaray to load the correct file.
+    @kind                specifies the save file string either to training or validation.
+    @return              a list of all measured accuracys. """
     def load_accuracy_csv(self, optimizer_name, kind, batch_size):
         validation_list = []
         try:
